@@ -4,28 +4,16 @@ use std::io;
 fn base(input: &str) -> io::Result<(Vec<i32>, Vec<i32>)> {
     let lines: Vec<String> = read_lines(input).unwrap();
 
-    let lines: Vec<Vec<&str>> = lines
+    let lines: Vec<(i32, i32)> = lines
         .iter()
-        .map(|l| l.split_whitespace().take(2).collect::<Vec<&str>>())
+        .map(|l| l.split_whitespace().take(2).collect::<Vec<&str>>()) // "1  2" -> vec!["1", "2"]
+        .map(|l| (l[0].parse::<i32>().unwrap(), l[1].parse::<i32>().unwrap())) // vec!["1", "2"] -> (1, 2)
         .collect();
 
-    // converts split a string like "123   345", into vec!["123", "345"]
-    let lines: Vec<(&str, &str)> = lines.into_iter().map(|l| (l[0], l[1])).collect();
+    // vec![(1,2), (3,4)] -> vec![1,3] & vec![2,4]
+    let (mut left, mut right): (Vec<_>, Vec<_>) = lines.into_iter().unzip();
 
-    // converts vec![vec!["1", "2"], vec!["3", "4"]], into two separate vectors vec!["1", "3"] and
-    // vec!["2", "4"]
-    let (left, right): (Vec<_>, Vec<_>) = lines.into_iter().unzip();
-
-    // parse string to int, and sort the vector
-    let mut left = left
-        .iter()
-        .map(|c| c.parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
     left.sort();
-    let mut right = right
-        .iter()
-        .map(|c| c.parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
     right.sort();
 
     Ok((left, right))
