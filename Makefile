@@ -1,7 +1,5 @@
 .PHONY: all
-all:
-	@echo "Use either of functions: scaffold or run. Example:"
-	@echo "make run ARG=01"
+all: test run
 
 .PHONY: scaffold
 scaffold:
@@ -17,3 +15,6 @@ scaffold:
 run:
 	cargo run --bin $(ARG)
 
+.PHONY: test
+test:
+	cargo test --bin $(ARG)
